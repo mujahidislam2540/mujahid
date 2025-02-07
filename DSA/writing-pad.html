@@ -1,0 +1,96 @@
+<!-- Writing Pad Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing Pad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            margin-top: 20px;
+            font-size: 36px;
+        }
+
+        textarea {
+            width: 80%;
+            height: 250px;
+            font-size: 18px;
+            padding: 15px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            background: white;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 18px;
+            font-size: 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            transition: 0.3s;
+        }
+
+        .save-btn { background-color: #2ecc71; color: white; }
+        .pdf-btn { background-color: #e74c3c; color: white; }
+        .view-btn { background-color: #3498db; color: white; }
+        button:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <h2>Writing Pad</h2>
+    <textarea id="writingArea" placeholder="Start writing..."></textarea>
+    
+    <div class="buttons">
+        <button class="save-btn" onclick="saveText()">Save Writing</button>
+        <button class="pdf-btn" onclick="downloadPDF()">Download as PDF</button>
+        <button class="view-btn" onclick="window.location.href='savings.html'">View Savings</button>
+    </div>
+
+    <script>
+        function saveText() {
+            let text = document.getElementById("writingArea").value;
+            if (!text.trim()) {
+                alert("Write something to save!");
+                return;
+            }
+            let fileName = prompt("Enter a name for your saving (max 20 characters):");
+            if (!fileName || fileName.length > 20) {
+                alert("Invalid name!");
+                return;
+            }
+            let savedFiles = JSON.parse(localStorage.getItem("savedFiles")) || [];
+            savedFiles.push({ name: fileName, text: text });
+            localStorage.setItem("savedFiles", JSON.stringify(savedFiles));
+            alert("Saved successfully!");
+            document.getElementById("writingArea").value = "";
+        }
+
+        function downloadPDF() {
+            let text = document.getElementById("writingArea").value;
+            let blob = new Blob([text], { type: "application/pdf" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "My_Writing.pdf";
+            link.click();
+        }
+    </script>
+</body>
+</html>
